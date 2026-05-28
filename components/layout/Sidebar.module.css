@@ -1,0 +1,100 @@
+.sidebar {
+  width: 260px;
+  background-color: var(--card-bg-solid);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  padding: 2.5rem 2rem 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.logoImage {
+  width: auto;
+  height: auto;
+  max-width: 160px;
+  max-height: 48px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.nav {
+  padding: 1.5rem 1rem;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navGroupTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding-left: 1rem;
+  opacity: 0.7;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.navItem {
+  /* active state handling usually added conditionally */
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.navIcon {
+  color: inherit;
+  opacity: 0.8;
+  transition: transform var(--transition-fast);
+}
+
+.navLink:hover {
+  background-color: var(--secondary-bg);
+  color: var(--primary-color);
+}
+
+.navLink:hover .navIcon {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.active {
+  background-color: var(--primary-color) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.active:hover {
+  transform: none;
+}
