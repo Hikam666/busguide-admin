@@ -8,6 +8,22 @@ export interface PoBus {
   logo_url: string | null
 }
 
+export interface Bus {
+  id: number
+  nomor_polisi: string
+  tipe: string
+  id_po: number | null
+  kapasitas: number | null
+  fasilitas: string[] | null
+  status: 'aktif' | 'tidak_aktif'
+  po_bus?: {
+    nama: string
+    logo_url: string | null
+  } | null
+}
+
+// === PO Bus Operations ===
+
 export const getPoBus = async () => {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -50,6 +66,63 @@ export const deletePoBus = async (id: number) => {
   const supabase = createClient()
   const { error } = await supabase
     .from('po_bus')
+    .delete()
+    .eq('id', id)
+
+  if (error) throw error
+  return true
+}
+
+// === Bus (Armada) Operations ===
+
+export const getBusWithPo = async () => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('bus')
+    .select(`
+      *,
+      po_bus (
+        nama,
+        logo_url
+      )
+    `)
+    .order('id', { ascending: false })
+
+  if (error) throw error
+  return data as Bus[]
+}
+
+export const createBus = async (bus: Omit<Bus, 'id' | 'po_bus'>) => {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const { data, error } = await supabase
+    .from('bus')
+    .insert([{ ...bus, created_by: user?.id }])
+    .select()
+    .single()
+
+  if (error) throw error
+  return data as Bus
+}
+
+export const updateBus = async (id: number, bus: Partial<Omit<Bus, 'id' | 'po_bus'>>) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('bus')
+    .update(bus)
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data as Bus
+}
+
+export const deleteBus = async (id: number) => {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('bus')
     .delete()
     .eq('id', id)
 

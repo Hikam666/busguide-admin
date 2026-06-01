@@ -11,7 +11,12 @@ export interface Jadwal {
   tanggal_selesai: string | null
   status: 'aktif' | 'tidak_aktif'
   rute?: { nama: string, kode: string }
-  bus?: { nomor_polisi: string, tipe: string }
+  bus?: { 
+    nomor_polisi: string
+    tipe: string
+    id_po: number | null
+    po_bus?: { nama: string, logo_url: string | null }
+  }
 }
 
 export const getJadwal = async () => {
@@ -21,12 +26,17 @@ export const getJadwal = async () => {
     .select(`
       *,
       rute:rute!id_rute (nama, kode),
-      bus:bus!id_bus (nomor_polisi, tipe)
+      bus:bus!id_bus (
+        nomor_polisi,
+        tipe,
+        id_po,
+        po_bus (nama, logo_url)
+      )
     `)
     .order('id', { ascending: false })
 
   if (error) throw error
-  return data as any[]
+  return data as Jadwal[]
 }
 
 export const createJadwal = async (jadwal: Omit<Jadwal, 'id' | 'rute' | 'bus'>) => {

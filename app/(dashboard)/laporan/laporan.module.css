@@ -1,28 +1,456 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.75rem;
+  height: calc(100vh - 72px - 2.5rem);
+  box-sizing: border-box;
+  animation: fadeIn var(--transition-normal);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-main);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1F2A44;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.15rem;
 }
 
-.filters {
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.exportBtn {
+  background-color: #0F4C85 !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  border: none !important;
   display: flex;
-  gap: 1rem;
   align-items: center;
-  background-color: var(--card-bg);
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(15, 76, 133, 0.2);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.exportBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 76, 133, 0.3);
+}
+
+.exportIcon,
+.chevronIcon {
+  flex-shrink: 0;
+}
+
+/* Interactive Filters Card */
+.filterCard {
+  background: white;
+  border: 1px solid #E3EBF6;
+  border-radius: var(--radius-xl);
   padding: 1rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.filterLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.datePickerContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.dateInput {
+  flex: 1;
+  height: 38px;
+  padding: 0.5rem 0.4rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  background-color: #FFFFFF;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast);
+}
+
+.dateInput:focus {
+  border-color: var(--primary-color);
+}
+
+.dateSeparator {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94A3B8;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.calendarIcon {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+.dateValText {
+  white-space: nowrap;
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filterSelect {
+  width: 100%;
+  height: 38px;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background-color: #FFFFFF;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast);
+}
+
+.filterSelect:focus {
+  border-color: var(--primary-color);
+}
+
+.selectChevron {
+  position: absolute;
+  right: 0.75rem;
+  color: #94A3B8;
+  pointer-events: none;
+}
+
+.applyFilterBtn {
+  background-color: #FEE2E2;
+  color: #EF4444;
+  border: 1px solid #FCA5A5;
+  border-radius: 8px;
+  padding: 0 1.25rem;
+  height: 38px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.applyFilterBtn:hover {
+  background-color: #FCA5A5;
+  color: #B91C1C;
+  border-color: #EF4444;
+}
+
+.funnelIcon {
+  flex-shrink: 0;
+}
+
+/* Main Details Card Table */
+.tableCard {
+  background: white;
+  border: 1px solid #E3EBF6;
+  border-radius: var(--radius-xl);
+  padding: 1.15rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.tableCard :global([class*="tableContainer"]) {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.tableCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.tableCardTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1F2A44;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.tableCardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbarBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background-color: white;
+  color: #64748B;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toolbarBtn:hover {
+  background-color: #F8FAFC;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Custom Table Row Cells */
+.idText {
+  font-weight: 700;
+  color: #0F4C85;
+  font-size: 0.88rem;
+}
+
+.stackedCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.primaryText {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.86rem;
+}
+
+.secondaryText {
+  color: #94A3B8;
+  font-weight: 600;
+  font-size: 0.76rem;
+}
+
+.modeOnline {
+  color: #059669;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.modeOffline {
+  color: #4B5563;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.routeText {
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.86rem;
+}
+
+.simpleRoute {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.25;
+}
+
+.routePart {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.routeArrow {
+  color: #64748B;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.operatorText {
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.86rem;
+}
+
+.occupancyWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background-color: #E2E8F0;
+  border-radius: 999px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #0F4C85;
+  border-radius: 999px;
+}
+
+.percentageText {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748B;
+  width: 2.2rem;
+  text-align: right;
+}
+
+.currencyLabel {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.revenueText {
+  font-weight: 750;
+  color: #1F2A44;
+  font-size: 0.92rem;
+}
+
+.statusPill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.statusSelesai {
+  background-color: #E8F8F0;
+  color: #10B981;
+}
+
+.statusBerjalan {
+  background-color: #EEF5FF;
+  color: #2563EB;
+}
+
+.statusBatal {
+  background-color: #FFFbeb;
+  color: #D97706;
+}
+
+/* Pagination Row Styling */
+.paginationRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+.paginationInfo {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.paginationActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pageBtn {
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  background-color: white;
+  color: #334155;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: #F8FAFC;
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .filterCard {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .filterCard {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

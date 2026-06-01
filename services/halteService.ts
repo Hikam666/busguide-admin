@@ -7,6 +7,7 @@ export interface Halte {
   alamat: string | null
   latitude: number
   longitude: number
+  fasilitas?: string | null
 }
 
 export const getHalte = async () => {

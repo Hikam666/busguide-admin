@@ -1,225 +1,502 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0.75rem;
   animation: fadeIn var(--transition-normal);
 }
 
-.welcomeSection {
-  background: linear-gradient(135deg, var(--card-bg-solid), var(--secondary-bg));
-  padding: 2.5rem;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md), 0 0 0 1px rgba(255,255,255,0.7) inset;
+.pageHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, rgba(15, 76, 133, 0.08), rgba(239, 245, 255, 0.9));
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(15, 76, 133, 0.08);
+  box-shadow: var(--shadow-sm);
 }
 
-.welcomeText h1 {
-  font-size: 2rem;
-  font-weight: 700;
+.pageTitle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1F2A44;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.15rem;
+}
+
+.pageLabel {
   color: var(--primary-color);
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.5px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
 }
 
-.welcomeText p {
+.pageSubtitle {
+  margin: 0;
+  max-width: 620px;
   color: var(--text-muted);
-  font-size: 1rem;
-  max-width: 600px;
-  line-height: 1.6;
+  line-height: 1.4;
+  font-size: 0.85rem;
 }
 
-.welcomeImage {
-  position: absolute;
-  right: 2rem;
-  bottom: -2rem;
-  width: 250px;
-  opacity: 0.9;
-  filter: drop-shadow(0 10px 15px rgba(69, 105, 168, 0.2));
+.pageBadge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-color);
+  color: #ffffff;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.pageBadgeIcon {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
 }
 
 .metricsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
 }
 
 .metricCard {
   background-color: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 1.5rem;
-  border-radius: var(--radius-lg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  transition: all var(--transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .metricCard:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .metricIcon {
-  width: 50px;
-  height: 50px;
-  border-radius: var(--radius-md);
+  width: 38px;
+  height: 38px;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
+}
+
+.metricBadge {
+  background: rgba(15, 76, 133, 0.08);
+  color: var(--primary-color);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .metricInfo {
   display: flex;
   flex-direction: column;
+  gap: 0.15rem;
 }
 
 .metricLabel {
-  font-size: 0.875rem;
   color: var(--text-muted);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .metricValue {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-main);
-  letter-spacing: -0.5px;
 }
 
 .metricTrend {
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
 }
 
-.trendUp {
-  color: var(--success);
-}
-
-.trendDown {
-  color: var(--danger);
-}
-
-.chartsSection {
+.overviewSection {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
+  gap: 0.75rem;
 }
 
-@media (max-width: 1024px) {
-  .chartsSection {
-    grid-template-columns: 1fr;
-  }
-}
-
-.chartCard {
+.chartCard,
+.quickReportCard {
   background-color: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 1.75rem;
-  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  display: flex;
-  flex-direction: column;
+  padding: 1rem;
 }
 
-.chartHeader {
+.chartHeader,
+.quickReportHeader,
+.activityHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
-.chartTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
+.chartAction {
+  min-width: 110px;
+}
+
+.sectionLabel {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.sectionNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.chartTitle,
+.activityTitle,
+.bannerTitle {
+  margin: 0;
   color: var(--text-main);
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.chartAction,
+.viewAllButton,
+.bannerButton {
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.chartAction {
+  background: var(--info);
+  color: white;
+  padding: 0.65rem 1rem;
+}
+
+.chartAction:hover,
+.viewAllButton:hover,
+.bannerButton:hover {
+  transform: translateY(-1px);
+}
+
+.viewAllButton {
+  background: transparent;
+  color: var(--primary-color);
+  padding: 0.7rem 1.1rem;
+  border: 1px solid rgba(15, 76, 133, 0.12);
+}
+
+.bannerButton {
+  background: var(--primary-color);
+  color: #fff;
+  padding: 0.75rem 1.3rem;
 }
 
 .chartPlaceholder {
-  flex: 1;
-  min-height: 250px;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(221, 235, 255, 0.4),
-    rgba(221, 235, 255, 0.4) 10px,
-    rgba(245, 248, 252, 0.4) 10px,
-    rgba(245, 248, 252, 0.4) 20px
-  );
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-hover);
-  font-weight: 500;
-  border: 1px dashed var(--primary-hover);
-}
-
-.activityList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.activityItem {
-  display: flex;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.activityItem:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.activityAvatar {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  background-color: var(--secondary-bg);
+  min-height: 200px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(229, 241, 254, 0.95));
+  border: 1px dashed rgba(15, 76, 133, 0.16);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--primary-color);
   font-weight: 600;
-  font-size: 0.875rem;
+}
+
+.quickReportCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.quickReportHeader {
+  align-items: flex-start;
+}
+
+.reportScrollArea {
+  display: grid;
+  gap: 0.75rem;
+  max-height: 195px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.reportScrollArea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reportScrollArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reportScrollArea::-webkit-scrollbar-thumb {
+  background: rgba(15, 76, 133, 0.16);
+  border-radius: 999px;
+}
+
+.reportCard {
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(15, 76, 133, 0.06);
+  background: white;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.01);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.reportCard:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 20px rgba(15, 76, 133, 0.06);
+  border-color: rgba(15, 76, 133, 0.14);
+}
+
+.avatarMini {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 76, 133, 0.15);
+  margin-top: 2px;
   flex-shrink: 0;
 }
 
-.activityDetails {
+.reportDetails {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
-.activityText {
-  font-size: 0.875rem;
-  color: var(--text-main);
-  line-height: 1.4;
+.reportHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.activityTime {
+.userNameText {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1F2A44;
+}
+
+.statusPill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.reportPathText {
+  font-size: 0.82rem;
+  color: #475569;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.routeNameHighlight {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.reportTime {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 0.25rem;
+  color: #94A3B8;
+  font-weight: 500;
 }
 
-/* Animations */
+.timeIcon {
+  flex-shrink: 0;
+}
+
+.addNoticeButton {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px dashed rgba(15, 76, 133, 0.24);
+  background: transparent;
+  color: var(--primary-color);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.activitySection {
+  padding: 1.75rem;
+}
+
+.activityHeader {
+  margin-bottom: 1.5rem;
+}
+
+.activityTitle {
+  font-size: 1.25rem;
+}
+
+.activityTableWrapper {
+  overflow-x: auto;
+}
+
+.activityTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.activityTable th,
+.activityTable td {
+  text-align: left;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid rgba(229, 241, 254, 0.95);
+}
+
+.activityTable th {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.activityTable tr {
+  transition: background-color var(--transition-fast);
+}
+
+.activityTable tr:hover {
+  background: rgba(239, 246, 255, 0.8);
+}
+
+.activityTable td {
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.noActivity {
+  color: var(--text-muted);
+  padding: 2rem 0;
+}
+
+
+@media (max-width: 1280px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overviewSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .pageBadge,
+  .chartAction,
+  .viewAllButton {
+    width: 100%;
+  }
+
+  .metricCard {
+    padding: 1.25rem;
+  }
+
+  .activityTable {
+    min-width: 100%;
+  }
+}
+
+.chartFilters {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid rgba(15, 76, 133, 0.12);
+  border-radius: 999px;
+  background-color: white;
+  color: #1F2A44;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.filterSelect:hover,
+.filterSelect:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 10px rgba(15, 76, 133, 0.06);
+}
+
+.chartContainer {
+  min-height: 220px;
+  margin-top: 1rem;
+  width: 100%;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

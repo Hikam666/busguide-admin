@@ -14,11 +14,12 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  table-layout: fixed;
 }
 
 .table th {
   background-color: rgba(221, 235, 255, 0.3); /* Soft secondary background */
-  padding: 1.25rem 1.5rem;
+  padding: 0.55rem 1.25rem;
   font-weight: 600;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -29,7 +30,7 @@
 }
 
 .table td {
-  padding: 1.25rem 1.5rem;
+  padding: 0.55rem 1.25rem;
   font-size: 0.9rem;
   color: var(--text-main);
   border-bottom: 1px solid var(--border-color);
@@ -42,6 +43,10 @@
 
 .table tbody tr:hover td {
   background-color: rgba(221, 235, 255, 0.4);
+}
+
+.table tbody tr.selectedRow td {
+  background-color: rgba(15, 76, 133, 0.08) !important;
 }
 
 .centerCell {
