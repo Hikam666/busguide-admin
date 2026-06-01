@@ -504,3 +504,22 @@
   padding-left: 0.75rem !important;
   padding-right: 0.75rem !important;
 }
+
+.departureCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.intervalText {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.fareText {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+}

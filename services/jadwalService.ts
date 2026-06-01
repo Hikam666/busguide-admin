@@ -10,6 +10,8 @@ export interface Jadwal {
   tanggal_mulai: string | null
   tanggal_selesai: string | null
   status: 'aktif' | 'tidak_aktif'
+  interval?: number | null
+  tarif?: number | null
   rute?: { nama: string, kode: string }
   bus?: { 
     nomor_polisi: string

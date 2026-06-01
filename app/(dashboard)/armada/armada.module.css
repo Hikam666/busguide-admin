@@ -552,3 +552,64 @@
   transform: translateX(18px);
 }
 
+.busNamePlateCell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-start;
+}
+
+.busNameText {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.pillLayanan {
+  background-color: rgba(15, 76, 133, 0.06);
+  color: var(--primary-color);
+  border: 1px solid rgba(15, 76, 133, 0.12);
+  border-radius: 6px;
+  padding: 0.18rem 0.55rem;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.76rem;
+  text-align: center;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kontakCell {
+  display: flex;
+  align-items: center;
+  color: var(--text-main);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.kontakText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.fasilitasCell {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.fasilitasText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+

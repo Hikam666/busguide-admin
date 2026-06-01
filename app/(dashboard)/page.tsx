@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getHalte } from '@/services/halteService'
 import { getRute } from '@/services/ruteService'
-import { getPoBus } from '@/services/armadaService'
+import { getBusWithPo } from '@/services/armadaService'
 import { getWisata } from '@/services/wisataService'
 import { PerjalananLaporan, getLaporanPerjalanan } from '@/services/laporanService'
 import { getJadwal, Jadwal } from '@/services/jadwalService'
@@ -70,7 +70,7 @@ export default function Dashboard() {
       const results = await Promise.allSettled([
         getHalte(),
         getRute(),
-        getPoBus(),
+        getBusWithPo(),
         getWisata(),
         getLaporanPerjalanan(),
         getJadwal(),

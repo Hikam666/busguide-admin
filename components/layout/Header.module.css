@@ -84,11 +84,7 @@
   background-color: #E3EBF6;
 }
 
-.userSection {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+
 
 .userInfo {
   display: flex;
@@ -121,6 +117,26 @@
   font-weight: 700;
   font-size: 1.1rem;
   box-shadow: 0 6px 16px rgba(15, 76, 133, 0.12);
+}
+
+.avatarImage {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 6px 16px rgba(15, 76, 133, 0.12);
+  border: 1.5px solid #E3EBF6;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: opacity 0.2s;
+}
+
+.userSection:hover {
+  opacity: 0.85;
 }
 
 .logoutIcon {

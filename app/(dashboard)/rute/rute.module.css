@@ -400,3 +400,27 @@
   color: #ffffff !important;
   border-color: var(--primary-color) !important;
 }
+
+.pillActive {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 6px;
+  padding: 0.15rem 0.55rem;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.pillInactive {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  padding: 0.15rem 0.55rem;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-align: center;
+}

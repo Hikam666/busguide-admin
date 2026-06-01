@@ -23,6 +23,30 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [notifications, setNotifications] = useState<NotificationItem[]>([])
+  
+  // User Profile State
+  const [profile, setProfile] = useState<{ nama: string; role: string; avatar_url: string | null } | null>(null)
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('nama, role, avatar_url')
+            .eq('id', user.id)
+            .single()
+          if (data) {
+            setProfile(data)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile:', err)
+      }
+    }
+    fetchProfile()
+  }, [supabase])
 
   // Format date helper
   const formatTimeAgo = (dateStr: string) => {
@@ -245,12 +269,24 @@ export default function Header() {
  
           <div className={styles.divider}></div>
  
-          <div className={styles.userSection}>
+          <div 
+            className={styles.userSection} 
+            onClick={() => router.push('/profile')} 
+            role="button" 
+            tabIndex={0}
+            style={{ cursor: 'pointer' }}
+          >
             <div className={styles.userInfo}>
-              <span className={styles.userName}>Admin BusGuide</span>
-              <span className={styles.userRole}>Super Admin</span>
+              <span className={styles.userName}>{profile?.nama || 'Loading...'}</span>
+              <span className={styles.userRole}>{profile?.role === 'admin' ? 'Super Admin' : (profile?.role || 'Super Admin')}</span>
             </div>
-            <div className={styles.avatar}>A</div>
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt="" className={styles.avatarImage} />
+            ) : (
+              <div className={styles.avatar}>
+                {profile?.nama ? profile.nama.charAt(0).toUpperCase() : 'A'}
+              </div>
+            )}
           </div>
  
           <button onClick={handleLogout} className={styles.logoutIcon} aria-label="Logout" title="Logout">

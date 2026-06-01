@@ -7,6 +7,7 @@ export interface Rute {
   terminal_awal: number | null
   terminal_akhir: number | null
   estimasi_menit: number | null
+  status_operasi?: 'aktif' | 'tidak_aktif' | null
   halte_awal?: { id: number; nama: string; latitude: number; longitude: number } | null
   halte_akhir?: { id: number; nama: string; latitude: number; longitude: number } | null
 }

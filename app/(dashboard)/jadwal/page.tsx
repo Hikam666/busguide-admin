@@ -74,7 +74,9 @@ export default function JadwalPage() {
         id_rute: 0, 
         jam_berangkat: '08:00', 
         hari: [], 
-        status: 'aktif' 
+        status: 'aktif',
+        interval: null,
+        tarif: null
       })
     }
     setIsModalOpen(true)
@@ -122,7 +124,9 @@ export default function JadwalPage() {
         hari: currentJadwal.hari || [],
         tanggal_mulai: currentJadwal.tanggal_mulai || null,
         tanggal_selesai: currentJadwal.tanggal_selesai || null,
-        status: currentJadwal.status as 'aktif' | 'tidak_aktif'
+        status: currentJadwal.status as 'aktif' | 'tidak_aktif',
+        interval: currentJadwal.interval !== undefined && currentJadwal.interval !== null ? Number(currentJadwal.interval) : null,
+        tarif: currentJadwal.tarif !== undefined && currentJadwal.tarif !== null ? Number(currentJadwal.tarif) : null
       }
 
       if (currentJadwal.id) {
@@ -257,7 +261,7 @@ export default function JadwalPage() {
     {
       key: 'rute',
       title: 'Rute',
-      width: '28%',
+      width: '25%',
       render: (item: Jadwal) => {
         const routeName = item.rute?.nama || `ID Rute: ${item.id_rute}`
         const routeCode = item.rute?.kode || ''
@@ -289,7 +293,7 @@ export default function JadwalPage() {
     {
       key: 'bus',
       title: 'PO Bus & Bus',
-      width: '22%',
+      width: '20%',
       render: (item: Jadwal) => {
         const poName = item.bus?.po_bus?.nama || 'PO Umum'
         const busType = item.bus?.tipe || '-'
@@ -312,16 +316,32 @@ export default function JadwalPage() {
     {
       key: 'jam_berangkat',
       title: 'Keberangkatan',
-      width: '12%',
+      width: '15%',
       render: (item: Jadwal) => {
         const time = item.jam_berangkat.substring(0, 5)
-        return <div className={styles.timeText}>{time} WIB</div>
+        return (
+          <div className={styles.departureCell}>
+            <div className={styles.timeText}>{time} WIB</div>
+            {item.interval && <div className={styles.intervalText}>Setiap {item.interval} mnt</div>}
+          </div>
+        )
+      }
+    },
+    {
+      key: 'tarif',
+      title: 'Tarif',
+      width: '12%',
+      render: (item: Jadwal) => {
+        const formattedFare = item.tarif !== null && item.tarif !== undefined
+          ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(Number(item.tarif))
+          : '-'
+        return <span className={styles.fareText}>{formattedFare}</span>
       }
     },
     {
       key: 'hari',
       title: 'Operasional',
-      width: '16%',
+      width: '14%',
       render: (item: Jadwal) => {
         const formatHari = (hari: string[] | null) => {
           if (!hari || hari.length === 0 || hari.length === 7) {
@@ -348,7 +368,7 @@ export default function JadwalPage() {
     {
       key: 'status',
       title: 'Status',
-      width: '10%',
+      width: '6%',
       render: (item: Jadwal) => {
         const isChecked = item.status === 'aktif'
         return (
@@ -367,7 +387,7 @@ export default function JadwalPage() {
     {
       key: 'actions',
       title: 'Aksi',
-      width: '12%',
+      width: '8%',
       render: (item: Jadwal) => (
         <div className={styles.actions}>
           <button
@@ -650,6 +670,23 @@ export default function JadwalPage() {
                 </label>
               ))}
             </div>
+          </div>
+
+          <div className={styles.row}>
+            <Input 
+              label="Interval Keberangkatan (Menit, Opsional)" 
+              type="number"
+              placeholder="e.g. 15"
+              value={currentJadwal?.interval === null || currentJadwal?.interval === undefined ? '' : currentJadwal.interval} 
+              onChange={(e) => setCurrentJadwal({...currentJadwal, interval: e.target.value ? parseInt(e.target.value) : null})}
+            />
+            <Input 
+              label="Tarif (Rupiah, Opsional)" 
+              type="number"
+              placeholder="e.g. 20000"
+              value={currentJadwal?.tarif === null || currentJadwal?.tarif === undefined ? '' : currentJadwal.tarif} 
+              onChange={(e) => setCurrentJadwal({...currentJadwal, tarif: e.target.value ? parseFloat(e.target.value) : null})}
+            />
           </div>
 
           <div className={styles.row}>

@@ -6,11 +6,15 @@ export interface PoBus {
   tagline: string | null
   deskripsi: string | null
   logo_url: string | null
+  jenis_layanan?: string | null
+  fasilitas?: string | null
+  kontak?: string | null
 }
 
 export interface Bus {
   id: number
   nomor_polisi: string
+  nama_bus?: string | null
   tipe: string
   id_po: number | null
   kapasitas: number | null

@@ -68,7 +68,7 @@ export default function ArmadaPage() {
     if (po) {
       setCurrentPo(po)
     } else {
-      setCurrentPo({ nama: '', tagline: '', deskripsi: '', logo_url: '' })
+      setCurrentPo({ nama: '', tagline: '', deskripsi: '', logo_url: '', jenis_layanan: '', fasilitas: '', kontak: '' })
     }
     setIsPoModalOpen(true)
   }
@@ -101,7 +101,10 @@ export default function ArmadaPage() {
         nama: currentPo.nama,
         tagline: currentPo.tagline || null,
         deskripsi: currentPo.deskripsi || null,
-        logo_url: currentPo.logo_url || null
+        logo_url: currentPo.logo_url || null,
+        jenis_layanan: currentPo.jenis_layanan || null,
+        fasilitas: currentPo.fasilitas || null,
+        kontak: currentPo.kontak || null
       }
 
       if (currentPo.id) {
@@ -151,7 +154,7 @@ export default function ArmadaPage() {
       setFacilityWiFi(list.includes('wifi'))
       setFacilityToilet(list.includes('toilet'))
     } else {
-      setCurrentBus({ nomor_polisi: '', tipe: '', id_po: poList[0]?.id || null, kapasitas: 40, status: 'aktif' })
+      setCurrentBus({ nomor_polisi: '', nama_bus: '', tipe: '', id_po: poList[0]?.id || null, kapasitas: 40, status: 'aktif' })
       setFacilityAC(true)
       setFacilityWiFi(false)
       setFacilityToilet(false)
@@ -193,6 +196,7 @@ export default function ArmadaPage() {
     try {
       const payload = {
         nomor_polisi: currentBus.nomor_polisi,
+        nama_bus: currentBus.nama_bus || null,
         tipe: currentBus.tipe,
         id_po: currentBus.id_po ? Number(currentBus.id_po) : null,
         kapasitas: currentBus.kapasitas ? Number(currentBus.kapasitas) : 40,
@@ -295,7 +299,7 @@ export default function ArmadaPage() {
     {
       key: 'logo',
       title: 'Logo',
-      width: '10%',
+      width: '8%',
       render: (item: PoBus) => (
         <div className={styles.logoCell}>
           {item.logo_url ? (
@@ -309,7 +313,7 @@ export default function ArmadaPage() {
     {
       key: 'nama',
       title: 'PO Bus',
-      width: '28%',
+      width: '22%',
       render: (item: PoBus) => (
         <div className={styles.poCell}>
           <div className={styles.poName} title={item.nama}>{item.nama}</div>
@@ -318,12 +322,33 @@ export default function ArmadaPage() {
       )
     },
     {
-      key: 'deskripsi',
-      title: 'Deskripsi',
-      width: '50%',
+      key: 'jenis_layanan',
+      title: 'Jenis Layanan',
+      width: '20%',
       render: (item: PoBus) => (
-        <div className={styles.descriptionText} title={item.deskripsi || ''}>
-          {item.deskripsi || '-'}
+        <span className={styles.pillLayanan} title={item.jenis_layanan || ''}>
+          {item.jenis_layanan || '-'}
+        </span>
+      )
+    },
+    {
+      key: 'kontak',
+      title: 'Kontak',
+      width: '15%',
+      render: (item: PoBus) => (
+        <div className={styles.kontakCell} title={item.kontak || ''}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-muted)', marginRight: '4px' }}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <span className={styles.kontakText}>{item.kontak || '-'}</span>
+        </div>
+      )
+    },
+    {
+      key: 'fasilitas',
+      title: 'Fasilitas PO',
+      width: '23%',
+      render: (item: PoBus) => (
+        <div className={styles.fasilitasCell} title={item.fasilitas || ''}>
+          <span className={styles.fasilitasText}>{item.fasilitas || '-'}</span>
         </div>
       )
     },
@@ -361,8 +386,11 @@ export default function ArmadaPage() {
       title: 'Nomor Polisi',
       width: '18%',
       render: (item: Bus) => (
-        <div className={styles.plateBadge} title={item.nomor_polisi}>
-          <span className={styles.plateText}>{item.nomor_polisi}</span>
+        <div className={styles.busNamePlateCell}>
+          <div className={styles.plateBadge} title={item.nomor_polisi}>
+            <span className={styles.plateText}>{item.nomor_polisi}</span>
+          </div>
+          {item.nama_bus && <span className={styles.busNameText} title={item.nama_bus}>{item.nama_bus}</span>}
         </div>
       )
     },
@@ -683,6 +711,26 @@ export default function ArmadaPage() {
               onChange={(e) => setCurrentPo({...currentPo, deskripsi: e.target.value})}
             />
           </div>
+          <div className={styles.row}>
+            <Input 
+              label="Kontak" 
+              placeholder="e.g. 0812-3456-789"
+              value={currentPo?.kontak || ''} 
+              onChange={(e) => setCurrentPo({...currentPo, kontak: e.target.value})}
+            />
+            <Input 
+              label="Jenis Layanan" 
+              placeholder="e.g. Executive, Patas, VIP"
+              value={currentPo?.jenis_layanan || ''} 
+              onChange={(e) => setCurrentPo({...currentPo, jenis_layanan: e.target.value})}
+            />
+          </div>
+          <Input 
+            label="Fasilitas PO" 
+            placeholder="e.g. AC, Wifi, Toilet, USB Charger"
+            value={currentPo?.fasilitas || ''} 
+            onChange={(e) => setCurrentPo({...currentPo, fasilitas: e.target.value})}
+          />
           <Input 
             label="Logo URL" 
             type="url"
@@ -720,13 +768,21 @@ export default function ArmadaPage() {
         }
       >
         <form onSubmit={handleSaveBus}>
-          <Input 
-            label="Nomor Polisi *" 
-            placeholder="e.g. N 1234 AB"
-            value={currentBus?.nomor_polisi || ''} 
-            onChange={(e) => setCurrentBus({...currentBus, nomor_polisi: e.target.value.toUpperCase()})}
-            required 
-          />
+          <div className={styles.row}>
+            <Input 
+              label="Nomor Polisi *" 
+              placeholder="e.g. N 1234 AB"
+              value={currentBus?.nomor_polisi || ''} 
+              onChange={(e) => setCurrentBus({...currentBus, nomor_polisi: e.target.value.toUpperCase()})}
+              required 
+            />
+            <Input 
+              label="Nama Bus (Opsional)" 
+              placeholder="e.g. Jetbus 5 / Voyager"
+              value={currentBus?.nama_bus || ''} 
+              onChange={(e) => setCurrentBus({...currentBus, nama_bus: e.target.value})}
+            />
+          </div>
           <div className={styles.row}>
             <Input 
               label="Tipe Bus *" 

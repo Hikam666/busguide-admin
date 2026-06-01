@@ -83,7 +83,7 @@ export default function HaltePage() {
       setFacilityWiFi(list.includes('wifi'))
       setFacilityWaitingRoom(list.includes('ruang tunggu'))
     } else {
-      setCurrentHalte({ tipe: 'halte', latitude: 0, longitude: 0 })
+      setCurrentHalte({ tipe: 'halte', latitude: 0, longitude: 0, foto: '' })
       setFacilityAC(false)
       setFacilityWiFi(false)
       setFacilityWaitingRoom(false)
@@ -136,6 +136,7 @@ export default function HaltePage() {
           latitude: currentHalte.latitude,
           longitude: currentHalte.longitude,
           fasilitas: facilitiesString,
+          foto: currentHalte.foto || null,
         })
       } else {
         await createHalte({
@@ -145,6 +146,7 @@ export default function HaltePage() {
           latitude: currentHalte.latitude,
           longitude: currentHalte.longitude,
           fasilitas: facilitiesString,
+          foto: currentHalte.foto || null,
         })
       }
       handleCloseModal()
@@ -183,9 +185,13 @@ export default function HaltePage() {
         const isTerminal = item.tipe === 'terminal'
         return (
           <div className={styles.nameCell}>
-            <div className={isTerminal ? styles.thumbTerminal : styles.thumbHalte} aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            </div>
+            {item.foto ? (
+              <img src={item.foto} className={styles.thumbImage} alt="" aria-hidden="true" />
+            ) : (
+              <div className={isTerminal ? styles.thumbTerminal : styles.thumbHalte} aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </div>
+            )}
             <div className={styles.nameDetails}>
               <span className={styles.stopName} title={item.nama}>{item.nama}</span>
               <span className={styles.stopCoords}>
@@ -492,6 +498,13 @@ export default function HaltePage() {
             label="Alamat"
             value={currentHalte?.alamat || ''}
             onChange={(e) => setCurrentHalte({ ...currentHalte, alamat: e.target.value })}
+          />
+
+          <Input
+            label="Foto URL"
+            placeholder="e.g. https://..."
+            value={currentHalte?.foto || ''}
+            onChange={(e) => setCurrentHalte({ ...currentHalte, foto: e.target.value })}
           />
 
           <div className={styles.formGroup}>

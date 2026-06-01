@@ -8,6 +8,7 @@ export interface Halte {
   latitude: number
   longitude: number
   fasilitas?: string | null
+  foto?: string | null
 }
 
 export const getHalte = async () => {

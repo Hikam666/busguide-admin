@@ -56,7 +56,7 @@ export default function RutePage() {
     if (rute) {
       setCurrentRute(rute)
     } else {
-      setCurrentRute({ kode: '', nama: '', terminal_awal: null, terminal_akhir: null, estimasi_menit: null })
+      setCurrentRute({ kode: '', nama: '', terminal_awal: null, terminal_akhir: null, estimasi_menit: null, status_operasi: 'aktif' })
     }
     setIsModalOpen(true)
   }
@@ -90,7 +90,8 @@ export default function RutePage() {
         nama: currentRute.nama,
         terminal_awal: currentRute.terminal_awal ? Number(currentRute.terminal_awal) : null,
         terminal_akhir: currentRute.terminal_akhir ? Number(currentRute.terminal_akhir) : null,
-        estimasi_menit: currentRute.estimasi_menit ? Number(currentRute.estimasi_menit) : null
+        estimasi_menit: currentRute.estimasi_menit ? Number(currentRute.estimasi_menit) : null,
+        status_operasi: currentRute.status_operasi || 'aktif'
       }
 
       if (currentRute.id) {
@@ -159,7 +160,7 @@ export default function RutePage() {
     {
       key: 'kode',
       title: 'Kode Rute',
-      width: '15%',
+      width: '12%',
       render: (item: Rute) => (
         <div className={styles.routeBadge} title={item.kode}>
           <span className={styles.routeBadgeText}>{item.kode}</span>
@@ -169,7 +170,7 @@ export default function RutePage() {
     {
       key: 'nama',
       title: 'Nama Rute',
-      width: '28%',
+      width: '23%',
       render: (item: Rute) => (
         <div className={styles.routeNameCell} title={item.nama}>
           <span className={styles.routeNameText}>{item.nama}</span>
@@ -179,7 +180,7 @@ export default function RutePage() {
     {
       key: 'terminal_awal',
       title: 'Terminal Awal',
-      width: '20%',
+      width: '18%',
       render: (item: Rute) => (
         <div className={styles.terminalCell} title={item.halte_awal?.nama || '-'}>
           <div className={styles.terminalIconWrapper} style={{ backgroundColor: 'rgba(37, 99, 235, 0.1)' }}>
@@ -192,7 +193,7 @@ export default function RutePage() {
     {
       key: 'terminal_akhir',
       title: 'Terminal Akhir',
-      width: '20%',
+      width: '18%',
       render: (item: Rute) => (
         <div className={styles.terminalCell} title={item.halte_akhir?.nama || '-'}>
           <div className={styles.terminalIconWrapper} style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
@@ -205,13 +206,26 @@ export default function RutePage() {
     {
       key: 'estimasi_menit',
       title: 'Estimasi Waktu',
-      width: '17%',
+      width: '14%',
       render: (item: Rute) => (
         <div className={styles.durationCell}>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-muted)' }}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
           <span className={styles.durationText}>{item.estimasi_menit ? `${item.estimasi_menit} Menit` : '-'}</span>
         </div>
       )
+    },
+    {
+      key: 'status_operasi',
+      title: 'Status Operasi',
+      width: '10%',
+      render: (item: Rute) => {
+        const isActive = item.status_operasi !== 'tidak_aktif'
+        return (
+          <span className={isActive ? styles.pillActive : styles.pillInactive}>
+            {isActive ? 'AKTIF' : 'TIDAK AKTIF'}
+          </span>
+        )
+      }
     },
     {
       key: 'actions',
@@ -470,13 +484,30 @@ export default function RutePage() {
             </div>
           </div>
 
-          <Input 
-            label="Estimasi Waktu (Menit)" 
-            type="number"
-            placeholder="e.g. 120"
-            value={currentRute?.estimasi_menit === null || currentRute?.estimasi_menit === undefined ? '' : currentRute.estimasi_menit} 
-            onChange={(e) => setCurrentRute({...currentRute, estimasi_menit: e.target.value ? parseInt(e.target.value) : null})}
-          />
+          <div className={styles.row}>
+            <Input 
+              label="Estimasi Waktu (Menit)" 
+              type="number"
+              placeholder="e.g. 120"
+              value={currentRute?.estimasi_menit === null || currentRute?.estimasi_menit === undefined ? '' : currentRute.estimasi_menit} 
+              onChange={(e) => setCurrentRute({...currentRute, estimasi_menit: e.target.value ? parseInt(e.target.value) : null})}
+            />
+            <div className={styles.formGroup}>
+              <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Status Operasi</label>
+              <select 
+                style={{
+                  width: '100%', padding: '0.625rem 0.875rem', fontSize: '0.875rem',
+                  border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)',
+                  backgroundColor: 'var(--bg-color)', color: 'var(--text-main)'
+                }}
+                value={currentRute?.status_operasi || 'aktif'}
+                onChange={(e) => setCurrentRute({...currentRute, status_operasi: e.target.value as 'aktif' | 'tidak_aktif'})}
+              >
+                <option value="aktif">Aktif</option>
+                <option value="tidak_aktif">Tidak Aktif</option>
+              </select>
+            </div>
+          </div>
         </form>
       </Modal>
 
