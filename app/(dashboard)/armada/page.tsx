@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
 import { PoBus, Bus, getPoBus, createPoBus, updatePoBus, deletePoBus, getBusWithPo, createBus, updateBus, deleteBus } from '@/services/armadaService'
+import { uploadFile } from '@/services/uploadService'
 import styles from './armada.module.css'
 
 export default function ArmadaPage() {
@@ -18,6 +19,7 @@ export default function ArmadaPage() {
   const [isPoModalOpen, setIsPoModalOpen] = useState(false)
   const [isPoDeleteModalOpen, setIsPoDeleteModalOpen] = useState(false)
   const [currentPo, setCurrentPo] = useState<Partial<PoBus> | null>(null)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
 
   // Bus Modal States
   const [isBusModalOpen, setIsBusModalOpen] = useState(false)
@@ -70,12 +72,14 @@ export default function ArmadaPage() {
     } else {
       setCurrentPo({ nama: '', tagline: '', deskripsi: '', logo_url: '', jenis_layanan: '', fasilitas: '', kontak: '' })
     }
+    setLogoFile(null)
     setIsPoModalOpen(true)
   }
 
   const handleClosePoModal = () => {
     setIsPoModalOpen(false)
     setCurrentPo(null)
+    setLogoFile(null)
   }
 
   const handleOpenPoDelete = (po: PoBus) => {
@@ -97,11 +101,17 @@ export default function ArmadaPage() {
 
     setSubmitting(true)
     try {
+      let uploadedUrl = currentPo.logo_url || null
+      
+      if (logoFile) {
+        uploadedUrl = await uploadFile(logoFile, 'busguide_images', 'pobus')
+      }
+
       const payload = {
         nama: currentPo.nama,
         tagline: currentPo.tagline || null,
         deskripsi: currentPo.deskripsi || null,
-        logo_url: currentPo.logo_url || null,
+        logo_url: uploadedUrl,
         jenis_layanan: currentPo.jenis_layanan || null,
         fasilitas: currentPo.fasilitas || null,
         kontak: currentPo.kontak || null
@@ -731,12 +741,24 @@ export default function ArmadaPage() {
             value={currentPo?.fasilitas || ''} 
             onChange={(e) => setCurrentPo({...currentPo, fasilitas: e.target.value})}
           />
-          <Input 
-            label="Logo URL" 
-            type="url"
-            value={currentPo?.logo_url || ''} 
-            onChange={(e) => setCurrentPo({...currentPo, logo_url: e.target.value})}
-          />
+          <div className={styles.formGroup}>
+            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Logo PO Bus</label>
+            <input 
+              type="file" 
+              accept="image/*"
+              style={{ width: '100%', padding: '0.625rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)' }}
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setLogoFile(e.target.files[0])
+                }
+              }}
+            />
+            {(logoFile || currentPo?.logo_url) && (
+              <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                {logoFile ? `Terpilih: ${logoFile.name}` : (currentPo?.logo_url ? 'Logo saat ini sudah tersedia. Biarkan kosong jika tidak ingin mengubahnya.' : '')}
+              </div>
+            )}
+          </div>
         </form>
       </Modal>
 

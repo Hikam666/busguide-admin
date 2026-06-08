@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { uploadFile } from '@/services/uploadService'
 import styles from './profile.module.css'
 
 interface Profile {
@@ -31,6 +32,7 @@ export default function ProfilePage() {
   const [noHp, setNoHp] = useState('')
   const [alamat, setAlamat] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [role, setRole] = useState('')
   const [statusAkun, setStatusAkun] = useState('aktif')
   const [lastLogin, setLastLogin] = useState('')
@@ -94,13 +96,19 @@ export default function ProfilePage() {
 
     setSubmitting(true)
     try {
+      let uploadedUrl = avatarUrl.trim() || null
+
+      if (avatarFile) {
+        uploadedUrl = await uploadFile(avatarFile, 'avatars')
+      }
+
       const { error } = await supabase
         .from('profiles')
         .update({
           nama: nama.trim(),
           no_hp: noHp.trim() || null,
           alamat: alamat.trim() || null,
-          avatar_url: avatarUrl.trim() || null
+          avatar_url: uploadedUrl
         })
         .eq('id', userId)
 
@@ -192,12 +200,24 @@ export default function ProfilePage() {
                 value={noHp}
                 onChange={(e) => setNoHp(e.target.value)}
               />
-              <Input
-                label="Foto Profil URL (Avatar)"
-                placeholder="https://..."
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-              />
+              <div className={styles.formGroup} style={{ flex: 1 }}>
+                <label className={styles.inputLabel}>Foto Profil (Avatar)</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  style={{ width: '100%', padding: '0.625rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)' }}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      setAvatarFile(e.target.files[0])
+                    }
+                  }}
+                />
+                {(avatarFile || avatarUrl) && (
+                  <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    {avatarFile ? `Terpilih: ${avatarFile.name}` : (avatarUrl ? 'Avatar saat ini sudah tersedia.' : '')}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className={styles.formGroup}>

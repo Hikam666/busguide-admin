@@ -7,6 +7,7 @@ import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
 import { Wisata, getWisata, createWisata, updateWisata, deleteWisata } from '@/services/wisataService'
 import { Rute, getRute } from '@/services/ruteService'
+import { uploadFile } from '@/services/uploadService'
 import styles from './wisata.module.css'
 
 export default function WisataPage() {
@@ -18,6 +19,7 @@ export default function WisataPage() {
   const [currentWisata, setCurrentWisata] = useState<Partial<Wisata> | null>(null)
   const [selectedRuteId, setSelectedRuteId] = useState<string | number>('')
   const [submitting, setSubmitting] = useState(false)
+  const [fotoFile, setFotoFile] = useState<File | null>(null)
 
   // Search & Filter States
   const [searchQuery, setSearchQuery] = useState('')
@@ -61,6 +63,7 @@ export default function WisataPage() {
       setCurrentWisata({ nama: '', alamat: '', kota: '', deskripsi: '', tarif: 0, jam_buka: '', jam_tutup: '', foto_url: '' })
       setSelectedRuteId('')
     }
+    setFotoFile(null)
     setIsModalOpen(true)
   }
 
@@ -68,6 +71,7 @@ export default function WisataPage() {
     setIsModalOpen(false)
     setCurrentWisata(null)
     setSelectedRuteId('')
+    setFotoFile(null)
   }
 
   const handleOpenDelete = (wisata: Wisata) => {
@@ -89,6 +93,12 @@ export default function WisataPage() {
 
     setSubmitting(true)
     try {
+      let uploadedUrl = currentWisata.foto_url || null
+      
+      if (fotoFile) {
+        uploadedUrl = await uploadFile(fotoFile, 'busguide_images', 'wisata')
+      }
+
       const payload = {
         nama: currentWisata.nama,
         alamat: currentWisata.alamat || null,
@@ -97,7 +107,7 @@ export default function WisataPage() {
         tarif: currentWisata.tarif !== undefined && currentWisata.tarif !== null ? currentWisata.tarif : null,
         jam_buka: currentWisata.jam_buka || null,
         jam_tutup: currentWisata.jam_tutup || null,
-        foto_url: currentWisata.foto_url || null
+        foto_url: uploadedUrl
       }
       
       const ruteIdNumber = selectedRuteId ? Number(selectedRuteId) : null
@@ -574,12 +584,24 @@ export default function WisataPage() {
               onChange={(e) => setCurrentWisata({...currentWisata, deskripsi: e.target.value})}
             />
           </div>
-          <Input 
-            label="Foto URL" 
-            type="url"
-            value={currentWisata?.foto_url || ''} 
-            onChange={(e) => setCurrentWisata({...currentWisata, foto_url: e.target.value})}
-          />
+          <div className={styles.formGroup}>
+            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Foto Wisata</label>
+            <input 
+              type="file" 
+              accept="image/*"
+              style={{ width: '100%', padding: '0.625rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)' }}
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setFotoFile(e.target.files[0])
+                }
+              }}
+            />
+            {(fotoFile || currentWisata?.foto_url) && (
+              <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                {fotoFile ? `Terpilih: ${fotoFile.name}` : (currentWisata?.foto_url ? 'Foto saat ini sudah tersedia. Biarkan kosong jika tidak ingin mengubahnya.' : '')}
+              </div>
+            )}
+          </div>
         </form>
       </Modal>
 
