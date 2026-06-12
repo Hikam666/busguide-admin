@@ -27,7 +27,7 @@ export const getRute = async () => {
   return data as Rute[]
 }
 
-export const createRute = async (rute: Omit<Rute, 'id' | 'halte_awal' | 'halte_akhir'>) => {
+export const tambahRute = async (rute: Omit<Rute, 'id' | 'halte_awal' | 'halte_akhir'>) => {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -41,7 +41,7 @@ export const createRute = async (rute: Omit<Rute, 'id' | 'halte_awal' | 'halte_a
   return data as Rute
 }
 
-export const updateRute = async (id: number, rute: Partial<Omit<Rute, 'id' | 'halte_awal' | 'halte_akhir'>>) => {
+export const editRute = async (id: number, rute: Partial<Omit<Rute, 'id' | 'halte_awal' | 'halte_akhir'>>) => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('rute')
@@ -54,7 +54,7 @@ export const updateRute = async (id: number, rute: Partial<Omit<Rute, 'id' | 'ha
   return data as Rute
 }
 
-export const deleteRute = async (id: number) => {
+export const hapusRute = async (id: number) => {
   const supabase = createClient()
   const { error } = await supabase
     .from('rute')
@@ -74,7 +74,7 @@ export interface TitikRute {
   longitude: number
 }
 
-export const getTitikRute = async (id_rute: number) => {
+export const ambilTitikDalamRute = async (id_rute: number) => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('titik_rute')
@@ -86,7 +86,7 @@ export const getTitikRute = async (id_rute: number) => {
   return data as TitikRute[]
 }
 
-export const createTitikRute = async (titik: Omit<TitikRute, 'id'>) => {
+export const tambahTitik = async (titik: Omit<TitikRute, 'id'>) => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('titik_rute')
@@ -98,7 +98,7 @@ export const createTitikRute = async (titik: Omit<TitikRute, 'id'>) => {
   return data as TitikRute
 }
 
-export const deleteTitikRute = async (id: number) => {
+export const hapusTitik = async (id: number) => {
   const supabase = createClient()
   const { error } = await supabase
     .from('titik_rute')
@@ -109,7 +109,7 @@ export const deleteTitikRute = async (id: number) => {
   return true
 }
 
-export const saveTitikRuteList = async (id_rute: number, list: Partial<TitikRute>[]) => {
+export const editUrutan = async (id_rute: number, list: Partial<TitikRute>[]) => {
   const supabase = createClient()
 
   // 1. Fetch current coordinate points in database
@@ -162,5 +162,51 @@ export const saveTitikRuteList = async (id_rute: number, list: Partial<TitikRute
   }
 
   return true
+}
+
+// Rute class methods
+export const tambah = tambahRute
+export const edit = editRute
+export const hapus = hapusRute
+
+export const getHalteList = async (idRute: number) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('rute')
+    .select('terminal_awal, terminal_akhir')
+    .eq('id', idRute)
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export const getTitikRute = ambilTitikDalamRute
+
+export const tentukanRuteTerbaik = async (asal: string, tujuan: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('rute')
+    .select('*')
+  if (error) throw error
+  return data?.[0] || null
+}
+
+export const hitungEstimasiWaktu = (jarakKm: number, kecepatanKmh: number = 30): number => {
+  return Math.round((jarakKm / kecepatanKmh) * 60)
+}
+
+export const validasiRute = (rute: Partial<Rute>): boolean => {
+  return !!rute.kode && !!rute.nama && !!rute.terminal_awal && !!rute.terminal_akhir
+}
+
+export const cariLokasi = async (query: string) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('halte')
+    .select('*')
+    .ilike('nama', `%${query}%`)
+  if (error) throw error
+  return data
 }
 

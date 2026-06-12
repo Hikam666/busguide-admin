@@ -18,7 +18,7 @@ export interface PerjalananLaporan {
   profil?: { nama: string, email: string }
 }
 
-export const getLaporanPerjalanan = async () => {
+export const getLaporanByAdmin = async () => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('perjalanan')
@@ -33,4 +33,18 @@ export const getLaporanPerjalanan = async () => {
 
   if (error) throw error
   return data as PerjalananLaporan[]
+}
+
+// Admin method
+export const lihatLaporan = getLaporanByAdmin
+
+// RiwayatPerjalanan method
+export const selesaikanPerjalanan = async (id: number): Promise<void> => {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('perjalanan')
+    .update({ status: 'selesai', waktu_selesai: new Date().toISOString() })
+    .eq('id', id)
+
+  if (error) throw error
 }

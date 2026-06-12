@@ -41,7 +41,7 @@ export const getJadwal = async () => {
   return data as Jadwal[]
 }
 
-export const createJadwal = async (jadwal: Omit<Jadwal, 'id' | 'rute' | 'bus'>) => {
+export const tambahJadwal = async (jadwal: Omit<Jadwal, 'id' | 'rute' | 'bus'>) => {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -55,7 +55,7 @@ export const createJadwal = async (jadwal: Omit<Jadwal, 'id' | 'rute' | 'bus'>) 
   return data as Jadwal
 }
 
-export const updateJadwal = async (id: number, jadwal: Partial<Omit<Jadwal, 'id' | 'rute' | 'bus'>>) => {
+export const editJadwal = async (id: number, jadwal: Partial<Omit<Jadwal, 'id' | 'rute' | 'bus'>>) => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('jadwal')
@@ -68,7 +68,7 @@ export const updateJadwal = async (id: number, jadwal: Partial<Omit<Jadwal, 'id'
   return data as Jadwal
 }
 
-export const deleteJadwal = async (id: number) => {
+export const hapusJadwal = async (id: number) => {
   const supabase = createClient()
   const { error } = await supabase
     .from('jadwal')
@@ -88,3 +88,8 @@ export const getBus = async () => {
   if (error) throw error
   return data
 }
+
+// Jadwal class methods
+export const tambah = tambahJadwal
+export const edit = editJadwal
+export const hapus = hapusJadwal

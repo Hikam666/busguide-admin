@@ -6,7 +6,7 @@ import { Table } from '@/components/ui/Table'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
-import { Rute, getRute, createRute, updateRute, deleteRute } from '@/services/ruteService'
+import { Rute, getRute, tambahRute, editRute, hapusRute } from '@/services/ruteService'
 import { Halte, getHalte } from '@/services/halteService'
 import styles from './rute.module.css'
 
@@ -95,9 +95,9 @@ export default function RutePage() {
       }
 
       if (currentRute.id) {
-        await updateRute(currentRute.id, payload)
+        await editRute(currentRute.id, payload)
       } else {
-        await createRute(payload)
+        await tambahRute(payload)
       }
       handleCloseModal()
       fetchData()
@@ -113,7 +113,7 @@ export default function RutePage() {
     if (!currentRute?.id) return
     setSubmitting(true)
     try {
-      await deleteRute(currentRute.id)
+      await hapusRute(currentRute.id)
       handleCloseDelete()
       fetchData()
     } catch (error) {

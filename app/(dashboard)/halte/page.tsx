@@ -5,7 +5,8 @@ import { Table } from '@/components/ui/Table'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
-import { Halte, getHalte, createHalte, updateHalte, deleteHalte } from '@/services/halteService'
+import { Halte, getHalte, tambahHalte, editHalte, hapusHalte } from '@/services/halteService'
+import { uploadFile } from '@/services/uploadService'
 import styles from './halte.module.css'
 
 export default function HaltePage() {
@@ -24,6 +25,9 @@ export default function HaltePage() {
   const [facilityAC, setFacilityAC] = useState(false)
   const [facilityWiFi, setFacilityWiFi] = useState(false)
   const [facilityWaitingRoom, setFacilityWaitingRoom] = useState(false)
+  
+  // File upload state
+  const [fotoFile, setFotoFile] = useState<File | null>(null)
 
   const fetchData = async (showLoading = true) => {
     if (showLoading) {
@@ -97,6 +101,7 @@ export default function HaltePage() {
     setFacilityAC(false)
     setFacilityWiFi(false)
     setFacilityWaitingRoom(false)
+    setFotoFile(null)
   }
 
   const handleOpenDelete = (halte: Halte) => {
@@ -128,25 +133,30 @@ export default function HaltePage() {
 
     setSubmitting(true)
     try {
+      let uploadedUrl = currentHalte.foto || null
+      if (fotoFile) {
+        uploadedUrl = await uploadFile(fotoFile, 'busguide_images', 'halte')
+      }
+
       if (currentHalte.id) {
-        await updateHalte(currentHalte.id, {
+        await editHalte(currentHalte.id, {
           nama: currentHalte.nama,
           tipe: currentHalte.tipe as 'halte' | 'terminal',
           alamat: currentHalte.alamat,
           latitude: currentHalte.latitude,
           longitude: currentHalte.longitude,
           fasilitas: facilitiesString,
-          foto: currentHalte.foto || null,
+          foto: uploadedUrl,
         })
       } else {
-        await createHalte({
+        await tambahHalte({
           nama: currentHalte.nama,
           tipe: (currentHalte.tipe || 'halte') as 'halte' | 'terminal',
           alamat: currentHalte.alamat || '',
           latitude: currentHalte.latitude,
           longitude: currentHalte.longitude,
           fasilitas: facilitiesString,
-          foto: currentHalte.foto || null,
+          foto: uploadedUrl,
         })
       }
       handleCloseModal()
@@ -165,7 +175,7 @@ export default function HaltePage() {
     if (!currentHalte?.id) return
     setSubmitting(true)
     try {
-      await deleteHalte(currentHalte.id)
+      await hapusHalte(currentHalte.id)
       handleCloseDelete()
       fetchData()
     } catch (error) {
@@ -500,12 +510,32 @@ export default function HaltePage() {
             onChange={(e) => setCurrentHalte({ ...currentHalte, alamat: e.target.value })}
           />
 
-          <Input
-            label="Foto URL"
-            placeholder="e.g. https://..."
-            value={currentHalte?.foto || ''}
-            onChange={(e) => setCurrentHalte({ ...currentHalte, foto: e.target.value })}
-          />
+          <div className={styles.formGroup}>
+            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-main)', marginBottom: '0.25rem' }}>Foto Halte</label>
+            <input 
+              type="file" 
+              accept="image/*"
+              style={{ 
+                width: '100%', 
+                padding: '0.625rem', 
+                border: '1px solid var(--border-color)', 
+                borderRadius: 'var(--radius-md)', 
+                backgroundColor: 'var(--bg-color)', 
+                color: 'var(--text-main)',
+                fontSize: '0.875rem'
+              }}
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  setFotoFile(e.target.files[0])
+                }
+              }}
+            />
+            {(fotoFile || currentHalte?.foto) && (
+              <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                {fotoFile ? `Terpilih: ${fotoFile.name}` : (currentHalte?.foto ? 'Foto saat ini sudah tersedia. Biarkan kosong jika tidak ingin mengubahnya.' : '')}
+              </div>
+            )}
+          </div>
 
           <div className={styles.formGroup}>
             <label className="text-sm font-medium text-main mb-1" style={{ color: 'var(--text-main)', fontSize: '0.875rem', fontWeight: 500 }}>

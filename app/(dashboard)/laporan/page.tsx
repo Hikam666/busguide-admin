@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { Table } from '@/components/ui/Table'
-import { getLaporanPerjalanan, PerjalananLaporan } from '@/services/laporanService'
+import { lihatLaporan, PerjalananLaporan } from '@/services/laporanService'
 import { getHalte, Halte } from '@/services/halteService'
 import styles from './laporan.module.css'
 
@@ -178,7 +178,7 @@ export default function LaporanPage() {
     setLoading(true)
     try {
       const [resPerjalanan, resHalte] = await Promise.all([
-        getLaporanPerjalanan(),
+        lihatLaporan(),
         getHalte()
       ])
       setDbData(resPerjalanan)

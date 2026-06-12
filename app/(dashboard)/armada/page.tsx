@@ -5,7 +5,7 @@ import { Table } from '@/components/ui/Table'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
-import { PoBus, Bus, getPoBus, createPoBus, updatePoBus, deletePoBus, getBusWithPo, createBus, updateBus, deleteBus } from '@/services/armadaService'
+import { PoBus, Bus, loadPoBus, tambahPO, editPO, hapusPO, getBusWithPo, tambahBus, editBus, hapusBus } from '@/services/armadaService'
 import { uploadFile } from '@/services/uploadService'
 import styles from './armada.module.css'
 
@@ -47,7 +47,7 @@ export default function ArmadaPage() {
     }
     try {
       const [poRes, busRes] = await Promise.all([
-        getPoBus(),
+        loadPoBus(),
         getBusWithPo()
       ])
       setPoList(poRes || [])
@@ -118,9 +118,9 @@ export default function ArmadaPage() {
       }
 
       if (currentPo.id) {
-        await updatePoBus(currentPo.id, payload)
+        await editPO(currentPo.id, payload)
       } else {
-        await createPoBus(payload)
+        await tambahPO(payload)
       }
       handleClosePoModal()
       fetchData()
@@ -142,7 +142,7 @@ export default function ArmadaPage() {
     if (!currentPo?.id) return
     setSubmitting(true)
     try {
-      await deletePoBus(currentPo.id)
+      await hapusPO(currentPo.id)
       handleClosePoDelete()
       fetchData()
     } catch (error) {
@@ -215,9 +215,9 @@ export default function ArmadaPage() {
       }
 
       if (currentBus.id) {
-        await updateBus(currentBus.id, payload)
+        await editBus(currentBus.id, payload)
       } else {
-        await createBus(payload)
+        await tambahBus(payload)
       }
       handleCloseBusModal()
       fetchData()
@@ -239,7 +239,7 @@ export default function ArmadaPage() {
     if (!currentBus?.id) return
     setSubmitting(true)
     try {
-      await deleteBus(currentBus.id)
+      await hapusBus(currentBus.id)
       handleCloseBusDelete()
       fetchData()
     } catch (error) {
@@ -257,7 +257,7 @@ export default function ArmadaPage() {
     const newStatus = currentStatus === 'aktif' ? 'tidak_aktif' : 'aktif'
     setBusList(prev => prev.map(item => item.id === id ? { ...item, status: newStatus } : item))
     try {
-      await updateBus(id, { status: newStatus })
+      await editBus(id, { status: newStatus })
       fetchData(false)
     } catch (error) {
       console.error('Failed to toggle status:', error)

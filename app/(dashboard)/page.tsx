@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { getHalte } from '@/services/halteService'
 import { getRute } from '@/services/ruteService'
 import { getBusWithPo } from '@/services/armadaService'
-import { getWisata } from '@/services/wisataService'
-import { PerjalananLaporan, getLaporanPerjalanan } from '@/services/laporanService'
+import { loadWisata } from '@/services/wisataService'
+import { PerjalananLaporan, lihatLaporan } from '@/services/laporanService'
 import { getJadwal, Jadwal } from '@/services/jadwalService'
 import styles from './home.module.css'
 
@@ -71,8 +71,8 @@ export default function Dashboard() {
         getHalte(),
         getRute(),
         getBusWithPo(),
-        getWisata(),
-        getLaporanPerjalanan(),
+        loadWisata(),
+        lihatLaporan(),
         getJadwal(),
       ])
 
@@ -245,7 +245,6 @@ export default function Dashboard() {
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
             </div>
-            <span className={styles.metricBadge}>+12%</span>
           </div>
           <div className={styles.metricInfo}>
             <span className={styles.metricLabel}>Total Halte</span>
@@ -271,7 +270,6 @@ export default function Dashboard() {
                 <path d="M13 5l7 7-7 7"></path>
               </svg>
             </div>
-            <span className={styles.metricBadge}>+4%</span>
           </div>
           <div className={styles.metricInfo}>
             <span className={styles.metricLabel}>Rute Aktif</span>
@@ -298,7 +296,6 @@ export default function Dashboard() {
                 <path d="M8 3v4"></path>
               </svg>
             </div>
-            <span className={styles.metricBadge}>Stabil</span>
           </div>
           <div className={styles.metricInfo}>
             <span className={styles.metricLabel}>Total Armada</span>
@@ -325,7 +322,6 @@ export default function Dashboard() {
                 <path d="M4 12h16"></path>
               </svg>
             </div>
-            <span className={styles.metricBadge}>+24%</span>
           </div>
           <div className={styles.metricInfo}>
             <span className={styles.metricLabel}>Wisata Terdaftar</span>

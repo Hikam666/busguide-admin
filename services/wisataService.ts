@@ -22,7 +22,7 @@ export interface Wisata {
   }[]
 }
 
-export const getWisata = async () => {
+export const loadWisata = async () => {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('wisata')
@@ -45,7 +45,7 @@ export const getWisata = async () => {
   return data as Wisata[]
 }
 
-export const createWisata = async (wisata: Omit<Wisata, 'id' | 'rute_wisata'>, id_rute?: number | null) => {
+export const tambahWisata = async (wisata: Omit<Wisata, 'id' | 'rute_wisata'>, id_rute?: number | null) => {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -67,7 +67,7 @@ export const createWisata = async (wisata: Omit<Wisata, 'id' | 'rute_wisata'>, i
   return data as Wisata
 }
 
-export const updateWisata = async (
+export const editWisata = async (
   id: number,
   wisata: Partial<Omit<Wisata, 'id' | 'rute_wisata'>>,
   id_rute?: number | null
@@ -100,7 +100,7 @@ export const updateWisata = async (
   return data as Wisata
 }
 
-export const deleteWisata = async (id: number) => {
+export const hapusWisata = async (id: number) => {
   const supabase = createClient()
   
   // Clean up relationships first
@@ -118,3 +118,32 @@ export const deleteWisata = async (id: number) => {
   if (error) throw error
   return true
 }
+
+// Wisata class methods
+export const loadAll = loadWisata
+
+export const loadData = async (idWisata: number) => {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('wisata')
+    .select(`
+      *,
+      rute_wisata (
+        id_rute,
+        rute (
+          id,
+          kode,
+          nama
+        )
+      )
+    `)
+    .eq('id', idWisata)
+    .single()
+
+  if (error) throw error
+  return data as Wisata
+}
+
+export const tambah = tambahWisata
+export const edit = editWisata
+export const hapus = hapusWisata

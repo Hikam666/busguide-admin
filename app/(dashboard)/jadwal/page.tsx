@@ -5,9 +5,9 @@ import { Table } from '@/components/ui/Table'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
-import { Jadwal, getJadwal, createJadwal, updateJadwal, deleteJadwal, getBus } from '@/services/jadwalService'
+import { Jadwal, getJadwal, tambahJadwal, editJadwal, hapusJadwal, getBus } from '@/services/jadwalService'
 import { Rute, getRute } from '@/services/ruteService'
-import { getPoBus, PoBus } from '@/services/armadaService'
+import { loadPoBus, PoBus } from '@/services/armadaService'
 import styles from './jadwal.module.css'
 
 const HARI_LIST = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']
@@ -47,7 +47,7 @@ export default function JadwalPage() {
         getJadwal(),
         getRute(),
         getBus(),
-        getPoBus()
+        loadPoBus()
       ])
       setData(jadwalRes || [])
       setRuteList(ruteRes || [])
@@ -130,9 +130,9 @@ export default function JadwalPage() {
       }
 
       if (currentJadwal.id) {
-        await updateJadwal(currentJadwal.id, payload)
+        await editJadwal(currentJadwal.id, payload)
       } else {
-        await createJadwal(payload)
+        await tambahJadwal(payload)
       }
       handleCloseModal()
       fetchData()
@@ -149,7 +149,7 @@ export default function JadwalPage() {
     if (!currentJadwal?.id) return
     setSubmitting(true)
     try {
-      await deleteJadwal(currentJadwal.id)
+      await hapusJadwal(currentJadwal.id)
       handleCloseDelete()
       fetchData()
     } catch (error) {
@@ -166,7 +166,7 @@ export default function JadwalPage() {
     setData(prev => prev.map(item => item.id === id ? { ...item, status: newStatus } : item))
     
     try {
-      await updateJadwal(id, { status: newStatus })
+      await editJadwal(id, { status: newStatus })
       fetchData(false)
     } catch (error) {
       console.error('Failed to toggle status:', error)

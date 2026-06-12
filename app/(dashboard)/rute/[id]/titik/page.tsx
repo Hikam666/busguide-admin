@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
-import { TitikRute, Rute, getTitikRute, getRute, saveTitikRuteList } from '@/services/ruteService'
+import { TitikRute, Rute, ambilTitikDalamRute, getRute, editUrutan } from '@/services/ruteService'
 import styles from './titik.module.css'
 
 export default function TitikRutePage({ params }: { params: Promise<{ id: string }> }) {
@@ -47,7 +47,7 @@ export default function TitikRutePage({ params }: { params: Promise<{ id: string
     }
     try {
       const [titikRes, ruteRes] = await Promise.all([
-        getTitikRute(idRute),
+        ambilTitikDalamRute(idRute),
         getRute()
       ])
       setData(titikRes || [])
@@ -374,7 +374,7 @@ export default function TitikRutePage({ params }: { params: Promise<{ id: string
   const handleSaveAll = async () => {
     setSaving(true)
     try {
-      await saveTitikRuteList(idRute, data)
+      await editUrutan(idRute, data)
       alert('Titik koordinat berhasil disimpan!')
       fetchData(false)
     } catch (error) {

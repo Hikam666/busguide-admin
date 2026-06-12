@@ -5,7 +5,7 @@ import { Table } from '@/components/ui/Table'
 import { Button } from '@/components/ui/Button'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
-import { Wisata, getWisata, createWisata, updateWisata, deleteWisata } from '@/services/wisataService'
+import { Wisata, loadWisata, tambahWisata, editWisata, hapusWisata } from '@/services/wisataService'
 import { Rute, getRute } from '@/services/ruteService'
 import { uploadFile } from '@/services/uploadService'
 import styles from './wisata.module.css'
@@ -36,7 +36,7 @@ export default function WisataPage() {
     }
     try {
       const [wisataRes, ruteRes] = await Promise.all([
-        getWisata(),
+        loadWisata(),
         getRute()
       ])
       setData(wisataRes || [])
@@ -113,9 +113,9 @@ export default function WisataPage() {
       const ruteIdNumber = selectedRuteId ? Number(selectedRuteId) : null
 
       if (currentWisata.id) {
-        await updateWisata(currentWisata.id, payload, ruteIdNumber)
+        await editWisata(currentWisata.id, payload, ruteIdNumber)
       } else {
-        await createWisata(payload, ruteIdNumber)
+        await tambahWisata(payload, ruteIdNumber)
       }
       handleCloseModal()
       fetchData()
@@ -133,7 +133,7 @@ export default function WisataPage() {
     if (!currentWisata?.id) return
     setSubmitting(true)
     try {
-      await deleteWisata(currentWisata.id)
+      await hapusWisata(currentWisata.id)
       handleCloseDelete()
       fetchData()
     } catch (error) {
